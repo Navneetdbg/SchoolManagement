@@ -1,0 +1,287 @@
+﻿@model School.web.ViewModel.createTeacherViewModel
+
+
+<div class="form-group">
+    <label>
+        Upload using Excel <span class="text-danger"></span>
+        <input name="IsFullDay" type="checkbox" id="IsFullDay" value="1" onchange="valueChanged()" data-toggle="modal" data-target="#myModals" />
+    </label>
+</div>
+
+<div class="modal" id="myModals">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Add or Update Event</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+
+            @using (Html.BeginForm("ImportUpsingExcel", "Student", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+            <div class="form-group">
+                <div class="form-control">
+                    <input type="file" name="postedFile" class="form-control" />
+                    <br/>
+                    <input type="submit" value="Import" class="btn btn-success" />
+                </div>
+            </div>
+            }
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div id="form">
+    <form id="frmcat" class="form-control">
+        <div class="row">
+            <div class="col-md-8">
+
+                <div class="form-group">
+                    <label>Country</label>
+                    <select name="CountryId" class="form-control" id="changeStatus">
+                        <option value="">---Select Country---</option>
+                        @foreach (var item in Model.Countries)
+                        {
+                            <option value="@item.Id">@item.Name</option>
+                        }
+                    </select>
+
+
+                </div>
+                <div class="form-group">
+                    <label>City</label>
+
+                    <select name="CityId" class="form-control" id="CityCombo"></select>
+
+
+                </div>
+
+                <div class="form-group">
+                    <label>School</label>
+
+                    <select name="SchoolId" class="form-control" id="SchoolCombo"></select>
+
+
+                </div>
+                <div class="form-group">
+                    <label>Class</label>
+
+                    <select name="ClassId" class="form-control" id="ClassCombo"></select>
+
+                </div>
+
+                <div class="form-group" id="form2">
+                    <label>Name <span class="text-danger">*</span></label>
+                    <input name="Name" class="form-control" placeholder="Name" id="NameId" />
+                </div>
+
+                <div class="form-group" id="form3">
+                    <label>Gender <span class="text-danger">*</span></label>
+                    <input name="Gender" class="form-control" placeholder="Gender" id="GenderId" />
+                </div>
+                <div class="form-group" id="form4">
+                    <label>Date of Birth <span class="text-danger">*</span></label>
+                    <input type="date" name="Date" class="form-control" placeholder="Date of Birth" id="DateId" />
+                </div>
+                <div class="form-group" id="form4">
+                    <label>Enail <span class="text-danger">*</span></label>
+                    <input type="email" name="Email" class="form-control" placeholder="Email" id="EmailId" />
+                </div>
+                <div class="form-group" id="form5">
+                    <label>Student Address <span class="text-danger">*</span></label>
+                    <textarea name="Address" class="form-control" placeholder="Student Address" id="Addressess" />
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>Student-Image <span class="text-danger">*</span></label>
+                    <input type="hidden" name="ImageUrl" id="ImageUrls" />
+                    <input type="file" id="imageupload" class="form-control" />
+                    <img id="showImage" class="form-control" style="width:300px;height:250px" />
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-2">
+                <button type="button" id="btnsave" class="btn btn-primary">
+                    <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                    Save
+                </button>
+            </div>
+        </div>
+
+    </form>
+</div>
+<script>
+    function valueChanged() {
+        debugger;
+        if ($('#IsFullDay').is(":checked")) 
+            $("#form").hide();
+        else
+            $("#form").show();
+    }
+
+    $("#imageupload").change(function () {
+        var element = this;
+        var formData = new FormData();
+        var totalFiles = element.files.length;
+        for (var i = 0; i < totalFiles; i++) {
+            var file = element.files[i];
+            formData.append("Photo", file);
+        }
+
+         $.ajax({
+            type: 'POST',
+             url: '@Url.Action("uploadImage", "Shared")',
+             data: formData,
+             dataType: 'json',
+             contentType: false,
+             processData: false
+
+         }).done(function (response) {
+             debugger;
+             if (response.Success) {
+                 $("#showImage").attr("src", response.Imageurl);
+                 $("#ImageUrls").val(response.Imageurl);
+             }
+
+
+        }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+            alert("F");
+        });
+    });
+
+        $("#btnsave").click(function () {
+            var v = $("#CityCombo").val();
+            var x = $("#SchoolCombo").val();
+            var z = $("#ClassCombo").val();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Create","Student")',
+            data: {
+                CityId : v,
+                Name: $("#NameId").val(),
+                Date: $("#DateId").val(),
+                SchoolId: x,
+                classId: z,
+                Addresses: $("#Addressess").val(),
+                gender: $("#GenderId").val(),
+                ImageUrl: $("#ImageUrls").val(),
+                EmailId: $("#EmailId").val()
+            }
+
+        }).done(function (response) {
+            $("#tblcat").html(response);
+           window.location = "@Url.Action("Index","Student")";
+
+
+        }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+            alert("F");
+        });
+
+    });
+
+    $("#changeStatus").change(function () {
+
+        var v = $("#changeStatus").val();
+        $.ajax({
+            type:'GET',
+                 url: '@Url.Action("GetCity", "School")',
+            contentType:'html',
+                    data: {
+
+                        Id: v
+                    }
+
+
+             }).done(function (response) {
+
+                     $("#CityCombo").empty();
+                     $("#CityCombo").append(response)
+
+
+                }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                    swal({
+                        title: "Failed",
+                        text: "Some Error Occured! We will Fix Them Soon ",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                    });
+                });
+    });
+
+
+    $("#CityCombo").change(function () {
+
+        var v = $("#CityCombo").val();
+        $.ajax({
+            type:'GET',
+                 url: '@Url.Action("GetSchool", "Teacher")',
+            contentType:'html',
+                    data: {
+
+                        Id: v
+                    }
+
+
+             }).done(function (response) {
+
+                 $("#SchoolCombo").empty();
+                 $("#SchoolCombo").append(response)
+
+
+                }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                    swal({
+                        title: "Failed",
+                        text: "Some Error Occured! We will Fix Them Soon ",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                    });
+                });
+    });
+    $("#SchoolCombo").change(function () {
+
+        var v = $("#SchoolCombo").val();
+        $.ajax({
+            type:'GET',
+                 url: '@Url.Action("GetClass", "Student")',
+            contentType:'html',
+                    data: {
+
+                        Id: v
+                    }
+
+
+             }).done(function (response) {
+
+                 $("#ClassCombo").empty();
+                 $("#ClassCombo").append(response)
+
+
+                }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                    swal({
+                        title: "Failed",
+                        text: "Some Error Occured! We will Fix Them Soon ",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                    });
+                });
+    });
+
+</script>
+
+

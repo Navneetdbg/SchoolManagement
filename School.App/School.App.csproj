@@ -1,0 +1,272 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{0E7A559B-6372-4787-9280-08775EE7661C}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>School.App</RootNamespace>
+    <AssemblyName>School.App</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AllExt\Extention.cs" />
+    <Compile Include="Controls\CountryUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\CountryUserControl.Designer.cs">
+      <DependentUpon>CountryUserControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CreateClassControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\CreateClassControl.Designer.cs">
+      <DependentUpon>CreateClassControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CreateStudentControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\CreateStudentControl.Designer.cs">
+      <DependentUpon>CreateStudentControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ForgetPassword.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ForgetPassword.Designer.cs">
+      <DependentUpon>ForgetPassword.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\GradeUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\GradeUserControl.Designer.cs">
+      <DependentUpon>GradeUserControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Login.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\Login.Designer.cs">
+      <DependentUpon>Login.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SignUp.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SignUp.Designer.cs">
+      <DependentUpon>SignUp.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SubjectUsercontrol.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SubjectUsercontrol.Designer.cs">
+      <DependentUpon>SubjectUsercontrol.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\TeacherUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\TeacherUserControl.Designer.cs">
+      <DependentUpon>TeacherUserControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\UserProfile.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\UserProfile.Designer.cs">
+      <DependentUpon>UserProfile.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Design\Forget.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Design\Forget.Designer.cs">
+      <DependentUpon>Forget.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Design\Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Design\Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Design\Login.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Design\Login.Designer.cs">
+      <DependentUpon>Login.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Design\LoginAndRegistration.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Design\LoginAndRegistration.Designer.cs">
+      <DependentUpon>LoginAndRegistration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Design\Register.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Design\Register.Designer.cs">
+      <DependentUpon>Register.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Controls\SchoolUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SchoolUserControl.Designer.cs">
+      <DependentUpon>SchoolUserControl.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Controls\CountryUserControl.resx">
+      <DependentUpon>CountryUserControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\CreateClassControl.resx">
+      <DependentUpon>CreateClassControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\CreateStudentControl.resx">
+      <DependentUpon>CreateStudentControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ForgetPassword.resx">
+      <DependentUpon>ForgetPassword.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\GradeUserControl.resx">
+      <DependentUpon>GradeUserControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Login.resx">
+      <DependentUpon>Login.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SignUp.resx">
+      <DependentUpon>SignUp.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\TeacherUserControl.resx">
+      <DependentUpon>TeacherUserControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\UserProfile.resx">
+      <DependentUpon>UserProfile.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Design\Forget.resx">
+      <DependentUpon>Forget.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Design\Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Design\Login.resx">
+      <DependentUpon>Login.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Design\LoginAndRegistration.resx">
+      <DependentUpon>LoginAndRegistration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Design\Register.resx">
+      <DependentUpon>Register.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="Controls\SchoolUserControl.resx">
+      <DependentUpon>SchoolUserControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\student-Icon-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\woman.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\teacher-icon-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Class-icon-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\reset.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\save.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\School.Database\School.Database.csproj">
+      <Project>{7FC0F992-01FE-43C9-86E5-51DE63624ECA}</Project>
+      <Name>School.Database</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\School.Entities\School.Entities.csproj">
+      <Project>{EF745A3D-35CB-4717-AE23-5EDF59BC4629}</Project>
+      <Name>School.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\School.Globals\School.Globals.csproj">
+      <Project>{58DBB45F-27AB-4B6A-BD46-F2FA31C9692B}</Project>
+      <Name>School.Globals</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\School.Services\School.Services.csproj">
+      <Project>{4F1576DE-8B07-48E4-AF3B-29C3B53B5905}</Project>
+      <Name>School.Services</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Loading.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Spinner-1s-200px.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\default-profile_01.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\settings-work-tool.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

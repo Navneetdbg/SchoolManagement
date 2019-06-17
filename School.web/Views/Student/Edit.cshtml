@@ -1,0 +1,247 @@
+﻿@model School.web.ViewModel.EditStudent
+
+
+
+<form id="frmcat" class="form-control">
+    <div class="row">
+        <div class="col-md-8">
+            <input type="hidden" value="@Model.Id" id="hiddenId" />
+            <div class="form-group">
+                <label>Country</label>
+                <select name="CountryId" class="form-control" id="changeStatus">
+                    <option value="">---Select Country---</option>
+                    @foreach (var item in Model.AvailableCountry)
+                    {
+                        <option value="@item.Id">@item.Name</option>
+                    }
+                </select>
+
+
+            </div>
+            <div class="form-group">
+                <label>City</label>
+
+                <select name="CityId" class="form-control" id="CityCombo">
+                    <option value="@Model.CityId">@Model.CityName</option>
+                </select>
+
+
+            </div>
+
+            <div class="form-group">
+                <label>School</label>
+
+                <select name="SchoolId" class="form-control" id="SchoolCombo">
+                    <option value="@Model.SchoolId">@Model.SchoolName</option>
+                </select>
+
+
+            </div>
+            <div class="form-group">
+                <label>Class</label>
+
+                <select name="ClassId" class="form-control" id="ClassCombo">
+                    <option value="@Model.ClassId">@Model.ClassName</option>
+                </select>
+
+            </div>
+
+            <div class="form-group">
+                <label>Name <span class="text-danger">*</span></label>
+                <input name="Name" class="form-control" value="@Model.Name" id="NameId" />
+            </div>
+            <div class="form-group">
+                <label>Email <span class="text-danger">*</span></label>
+                <input name="Name" class="form-control" value="@Model.Email" id="EmailId" />
+            </div>
+            <div class="form-group">
+                <label>Contact No <span class="text-danger">*</span></label>
+                <input name="Name" class="form-control" value="@Model.Contact" id="ContactId" />
+            </div>
+
+            <div class="form-group">
+                <label>Gender <span class="text-danger">*</span></label>
+                <input name="Gender" class="form-control" value="@Model.Gender" id="GenderId" />
+            </div>
+            <div class="form-group">
+                <label>Date of Birth <span class="text-danger">*</span></label>
+                <input type="date" name="Date" class="form-control" id="DateId" value="@Model.date.ToShortDateString()">
+            </div>
+            <div class="form-group">
+                <label>Address <span class="text-danger">*</span></label>
+                <textarea name="Address" class="form-control" id="Addressess">@Model.Address</textarea>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <label>Student-Image <span class="text-danger">*</span></label>
+            <input type="hidden" name="ImageUrl" id="ImageUrls" />
+            <input type="file" id="imageupload" class="form-control" />
+            <img src="@Model.ImageUrl" id="showImage" class="form-control" style="width:300px;height:250px" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <button type="button" id="btnsave" class="btn btn-primary">
+                <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                Save
+            </button>
+        </div>
+    </div>
+</form>
+
+<script>
+
+     $("#imageupload").change(function () {
+        var element = this;
+        var formData = new FormData();
+        var totalFiles = element.files.length;
+        for (var i = 0; i < totalFiles; i++) {
+            var file = element.files[i];
+            formData.append("Photo", file);
+        }
+
+         $.ajax({
+            type: 'POST',
+             url: '@Url.Action("uploadImage", "Shared")',
+             data: formData,
+             dataType: 'json',
+             contentType: false,
+             processData: false
+
+         }).done(function (response) {
+             debugger;
+             if (response.Success) {
+                 $("#showImage").attr("src", response.Imageurl);
+                 $("#ImageUrls").val(response.Imageurl);
+             }
+
+
+        }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+            alert("F");
+        });
+    });
+        $("#btnsave").click(function () {
+            var v = $("#CityCombo").val();
+            var x = $("#SchoolCombo").val();
+            var z = $("#ClassCombo").val();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Edit","Student")',
+            data: {
+                Id: $("#hiddenId").val(),
+                CityId : v,
+                Name: $("#NameId").val(),
+                Date: $("#DateId").val(),
+                SchoolId: x,
+                classId: z,
+                Addresses: $("#Addressess").val(),
+                gender: $("#GenderId").val(),
+                ImageUrl: $("#ImageUrls").val(),
+                EmailId: $("#EmailId").val(),
+                ContactId: $("#ContactId").val()
+            }
+
+        }).done(function (response) {
+            $("#tblcat").html(response);
+           window.location = "@Url.Action("Index", "Student")";
+
+
+        }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+            alert("F");
+        });
+
+    });
+
+    $("#changeStatus").change(function () {
+
+        var v = $("#changeStatus").val();
+        $.ajax({
+            type:'GET',
+                 url: '@Url.Action("GetCity", "School")',
+            contentType:'html',
+                    data: {
+
+                        Id: v
+                    }
+
+
+             }).done(function (response) {
+
+                     $("#CityCombo").empty();
+                     $("#CityCombo").append(response)
+
+
+                }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                    swal({
+                        title: "Failed",
+                        text: "Some Error Occured! We will Fix Them Soon ",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                    });
+                });
+    });
+
+
+    $("#CityCombo").change(function () {
+
+        var v = $("#CityCombo").val();
+        $.ajax({
+            type:'GET',
+                 url: '@Url.Action("GetSchool", "Teacher")',
+            contentType:'html',
+                    data: {
+
+                        Id: v
+                    }
+
+
+             }).done(function (response) {
+
+                 $("#SchoolCombo").empty();
+                 $("#SchoolCombo").append(response)
+
+
+                }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                    swal({
+                        title: "Failed",
+                        text: "Some Error Occured! We will Fix Them Soon ",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                    });
+                });
+    });
+    $("#SchoolCombo").change(function () {
+
+        var v = $("#SchoolCombo").val();
+        $.ajax({
+            type:'GET',
+                 url: '@Url.Action("GetClass", "Student")',
+            contentType:'html',
+                    data: {
+
+                        Id: v
+                    }
+
+
+             }).done(function (response) {
+
+                 $("#ClassCombo").empty();
+                 $("#ClassCombo").append(response)
+
+
+                }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                    swal({
+                        title: "Failed",
+                        text: "Some Error Occured! We will Fix Them Soon ",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                    });
+                });
+    });
+
+</script>
+
+

@@ -1,0 +1,3 @@
+C:\Users\navne\source\repos\SchoolManagementSystem\School.Form\obj\Debug\School.Form.Properties.Resources.resources
+C:\Users\navne\source\repos\SchoolManagementSystem\School.Form\obj\Debug\School.WinForm.csproj.GenerateResource.Cache
+C:\Users\navne\source\repos\SchoolManagementSystem\School.Form\obj\Debug\School.WinForm.csproj.CoreCompileInputs.cache

@@ -1,0 +1,195 @@
+﻿@model School.web.ViewModel.EditParent
+@{
+    ViewBag.Title = "Detail";
+}
+
+<link href="~/Content/DetailsCss.css" type="text/css" rel="stylesheet">
+<div class="container emp-profile">
+    <form method="post">
+        <div class="row">
+            <div class="col-md-5">
+                <div class="profile-img">
+                    <img src="@Model.ImageUrl" alt="" />
+                    <div class="file btn btn-lg btn-primary">
+                        Change Photo
+                        <input type="file" name="file" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="profile-head">
+                    <h5>
+                        @Model.Name
+                    </h5>
+
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">About</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            @*<div class="col-md-2">
+                    <button type="button" class="profile-edit-btn" id="btnAddMore">Export PDF</button>
+                </div>*@
+        </div>
+
+        <div class="row">
+            <div class="col-md-5">
+                <div class="profile-work">
+                    <p>
+                        <div class="form-group">
+                            <label>Add-Student<span class="text-danger">*</span></label>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <input id="txtSearch" class="form-control" placeholder="Search Student" value="@Model.search" />
+                                </div>
+                                <div class="col-md-4">
+                                    <button id="btnSearch" type="button" class="btn btn-success">Search</button>
+                                </div>
+                            </div>
+                        </div>
+                    </p>
+                    <p>
+                        <div id="studata">
+                            @{ Html.RenderAction("GetStudent", "Parent",new { Id = Model.Id});}
+                        </div>
+                    </p>
+
+
+
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div class="tab-content profile-tab" id="myTabContent">
+                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Id</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>@Model.Id</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Name</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>@Model.Name</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Gender</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>@Model.Gender</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Email</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>@Model.Email</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Contact</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>@Model.Contact</p>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Students</label>
+                            </div>
+                            <div class="col-md-6">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Student-Id</th>
+                                            <th>Student Name</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.students)
+                                        {
+                                            <tr>
+                                                <td>@item.Id</td>
+                                                <td>@item.Name</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Addresses</label>
+                            </div>
+                            <div class="col-md-6">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Address</th>
+                                            <th>City</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.Addresses)
+                                        {
+                                            <tr>
+                                                <td>@item.Details</td>
+                                                <td>@item.City.Name</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </form>
+</div>
+
+
+
+<script>
+  $("#btnSearch").click(function () {
+        var searchValue = $("#txtSearch").val();
+                $.ajax({
+                    type: 'GET',
+                    url: '@Url.Action("GetStudent","Parent")',
+                    contentType: 'html',
+                    data: {
+                        Search: searchValue,
+                        Id:'@Model.Id'
+                    }
+
+                }).done(function (response) {
+
+                    $("#studata").html(response);
+
+                }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("Fail");
+                });
+
+    });
+
+   
+
+
+</script>
+

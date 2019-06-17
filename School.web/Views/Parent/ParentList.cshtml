@@ -1,0 +1,240 @@
+﻿@model School.web.ViewModel.ParentListing
+
+@{
+
+}
+@if (Model != null && Model.parents.Count > 0)
+{
+    <form method="post">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <input type="text" id="searchnewtxt" class="form-control" name="Search" placeholder="Search" value="@Model.search" />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <button type="button" id="serachnewbtn" class="btn btn-success">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                    Search
+                </button>
+                &nbsp;
+                <button type="button" class="btn btn-success" id="tonewbtn" style="width:100px"><i class="fa fa-plus-circle" aria-hidden="true"></i>&nbsp;New</button>
+                &nbsp;
+                <button type="button" class="btn btn-success" id="resetbtn" style="width:100px">
+                    <i class="fa fa-minus" aria-hidden="true"></i>
+                    &nbsp;Reset
+                </button>
+                <br />
+
+            </div>
+
+        </div>
+    </form>
+    <table class="table table-hover">
+        <thead>
+            <tr onclick="">
+                <th>Id</th>
+                <th>Name</th>
+                <th>Gender</th>
+                <th>Student</th>
+                <th>Address</th>
+                
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.parents)
+            {
+            <tr onclick="window.location='@Url.Action("Detail", "Parent", new { Id = item.Id})'">
+
+                <td>@item.Id</td>
+                <td>@item.Name</td>
+                <td>@item.Gender</td>
+                @if (item.Students != null)
+                {
+                    <th>@item.Students.Count</th>
+                }
+                
+                @if (item.Addresses != null)
+                {
+                    <td>
+                        @foreach (var items in item.Addresses)
+                        {
+                            if (items != null)
+                            {
+                                @items.Details
+                            }
+
+                        }
+                    </td>
+                }
+
+                <td>
+                    <button class="tobtnEdit btn btn-default" data-id="@item.Id" style="height:35px"><i class="fas fa-edit" aria-hidden="true"></i>&nbsp;Edit</button>
+                    <button class="tobtndelete btn btn-danger" data-id="@item.Id" style="height:35px">
+                        <i class="far fa-trash-alt" aria-hidden="true"></i>
+                        Delete
+                    </button>
+                </td>
+            </tr>
+            }
+
+        </tbody>
+    </table>
+
+    <div>
+        @if (Model.pager != null)
+
+        {
+            if (Model.pager.CurrenPage > 1)
+            {
+                <button class="pageBtn btn btn-default" data-pagevalue="1"><<</button>
+                <button class="pageBtn btn btn-default" data-pagevalue="@(Model.pager.CurrenPage - 1) "><</button>
+            }
+            for (var page = Model.pager.StartPage; page <= Model.pager.EndPage; page++)
+            {
+                string activeClass = Model.pager.CurrenPage == page ? "active bg-info" : string.Empty;
+                <button class="pageBtn @(activeClass) btn btn-danger" data-pagevalue="@page">@page</button>
+            }
+            if (Model.pager.CurrenPage < Model.pager.TotalPage)
+            {
+                <button class="pageBtn btn btn-default" data-pagevalue="@(Model.pager.CurrenPage + 1)">></button>
+                <button class="pageBtn btn btn-default" data-pagevalue="@Model.pager.EndPage">>></button>
+
+            }
+
+
+        }
+    </div>
+}
+else
+{
+    <button type="button" class="btn btn-success" id="tonewbtn" style="width:100px"><i class="fa fa-plus-circle" aria-hidden="true"></i>&nbsp;New</button>
+    <h3>No Parent Is Available Please Create a New Parent</h3>
+}
+
+<script>
+    $("#serachnewbtn").click(function () {
+                var searchValue = $("#searchnewtxt").val();
+                $.ajax({
+                    type: 'GET',
+                    url: '@Url.Action("ParentList", "Parent")',
+                    data: {
+                        Search: searchValue
+                    }
+
+                }).done(function (response) {
+                    $("#tblcat").html(response);
+
+                }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("F");
+                });
+
+    });
+
+     $("#resetbtn").click(function () {
+                var searchValue = "";
+                $.ajax({
+                    type: 'GET',
+                    url: '@Url.Action("ParentList", "Parent")',
+                    data: {
+                        Search: searchValue
+                    }
+
+                }).done(function (response) {
+                    $("#tblcat").html(response);
+
+                }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("F");
+                });
+
+    });
+      $(".pageBtn").click(function () {
+
+                $.ajax({
+
+                    url: '@Url.Action("ParentList", "Parent")',
+                    data: {
+                        pageNo: $(this).attr("data-pagevalue")
+                    }
+
+
+                }).done(function (response) {
+                    $("#tblcat").html(response);
+
+
+                }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("F");
+                });
+
+    });
+     $("#tonewbtn").click(function () {
+         
+         $.ajax({
+             type:'GET',
+                    url: '@Url.Action("Create", "Parent")'
+
+                }).done(function (response) {
+                    $("#newatncon").html(response);
+                    focusAction("newatncon");
+
+                }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("F");
+                });
+
+     });
+            $(".tobtnEdit").click(function () {
+
+                $.ajax({
+
+                    url: '@Url.Action("Edit", "Teacher")',
+                    data: {
+                        Id: $(this).attr('data-id')
+                    }
+
+
+                }).done(function (response) {
+                    $("#newatncon").html(response);
+                    focusAction("newatncon");
+
+                }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("F");
+                });
+
+            });
+
+            $(".tobtndelete").click(function () {
+                swal({
+                    title: "Confirm",
+                    text: "Are you Sure! that you want to delete this Country",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                    .then((willDelete) => {
+                        if (willDelete) {
+                            debugger;
+                            $.ajax({
+                                type: 'POST',
+                                url: '@Url.Action("Delete", "Teacher")',
+                                data: {
+                                    Id: $(this).attr('data-id')
+                                }
+
+
+                            }).done(function (response) {
+                                $("#tblcat").html(response);
+                                swal("Poof! Your Category has been deleted!", {
+                                    icon: "success",
+                                });
+
+                            }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                                alert("You Can't Delete This Category");
+                            });
+
+                        }
+                    });
+
+            });
+
+</script>

@@ -1,0 +1,47 @@
+﻿@model School.web.ViewModel.EditParent
+   @{
+       var x = Model.Id;
+}
+@if (Model.students.Count > 0)
+{ 
+    
+    <table class="table table-bordered">
+        
+        <tbody>
+            @foreach (var item in Model.students)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Name</td>
+                    <td>@item.DateofBirth.ToShortDateString()</td>
+
+                    <td><button type="button" id="link" class="link btn btn-danger" data-id="@item.Id" style="background-color:blue;">Link</button></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+<script>
+    $(".link").click(function () {
+        var v = $(this).attr("data-id");
+         
+        debugger;
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("LinkStudent", "Parent")',
+            data: {
+                StudentId: v,
+                ParentId:'@x'
+            }
+
+        }).done(function (response) {
+            window.location = "@Url.Action("Detail","Parent",new { Id= Model.Id})";
+
+        }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                alert("Fail");
+
+        });
+
+    });
+</script>

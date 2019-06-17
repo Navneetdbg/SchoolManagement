@@ -1,0 +1,163 @@
+﻿@model School.web.ViewModel.CreateParent
+
+<form id="frmcat" class="form-control">
+    <div class="row">
+        <div class="col-md-8">
+
+            <div class="form-group">
+                <label>Name <span class="text-danger">*</span></label>
+                <input name="Name" class="form-control" placeholder="Name" id="NameId" />
+            </div>
+            <div class="form-group">
+                <label>EmailId <span class="text-danger">*</span></label>
+                <input name="Principal" id="EmailId" class="form-control" placeholder="EmailId" />
+            </div>
+            <div class="form-group">
+                <label>Contact <span class="text-danger">*</span></label>
+                <input name="Principal" id="Contact" class="form-control" placeholder="Contact" />
+            </div>
+            <div class="form-group">
+                <label>Gender <span class="text-danger">*</span></label>
+                <input name="Principal" id="PrincipalId" class="form-control" placeholder="Gender" />
+            </div>
+            <div class="form-group">
+                <label>Country</label>
+                <select name="CountryId" class="form-control" id="changeStatus">
+                    <option value="">---Select Country---</option>
+                    @foreach (var item in Model.countries)
+                    {
+                        <option value="@item.Id">@item.Name</option>
+                    }
+                </select>
+
+
+            </div>
+            <div class="form-group">
+                <label>City</label>
+
+                <select name="CityId" class="form-control" id="CityCombo">
+                    <option value="">-----Select City-----</option>
+                </select>
+
+
+            </div>
+            <div class="form-group">
+                <label>Address <span class="text-danger">*</span></label>
+                <textarea name="Address" class="form-control" placeholder="Address" id="Addressess" />
+            </div>
+
+
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label>Parent-Image <span class="text-danger">*</span></label>
+                <input type="hidden" name="ImageUrl" id="ImageUrls" />
+                <input type="file" id="imageupload" class="form-control" />
+                <img id="showImage" class="form-control" style="width:300px;height:250px" />
+            </div>
+        </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <button type="button" id="btnsave" class="btn btn-primary">
+                    <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                    Save
+                </button>
+            </div>
+        </div>
+</form>
+
+<script>
+      $("#imageupload").change(function () {
+        var element = this;
+        var formData = new FormData();
+        var totalFiles = element.files.length;
+        for (var i = 0; i < totalFiles; i++) {
+            var file = element.files[i];
+            formData.append("Photo", file);
+        }
+
+         $.ajax({
+            type: 'POST',
+             url: '@Url.Action("uploadImage", "Shared")',
+             data: formData,
+             dataType: 'json',
+             contentType: false,
+             processData: false
+
+         }).done(function (response) {
+             debugger;
+             if (response.Success) {
+                 $("#showImage").attr("src", response.Imageurl);
+                 $("#ImageUrls").val(response.Imageurl);
+             }
+
+
+        }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+            alert("F");
+        });
+    });
+
+
+
+       
+        $("#btnsave").click(function () {
+            var v = $("#CityCombo").val();
+            debugger;
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Create","Parent")',
+            data: {
+                
+                CityId : v,
+                Name: $("#NameId").val(),
+                Gender: $("#PrincipalId").val(),
+                Addres: $("#Addressess").val(),
+                Imageurl: $("#ImageUrls").val(),
+                EmailId: $("#EmailId").val(),
+                Contact: $("#Contact").val(),
+            }
+
+        }).done(function (response) {
+            $("#tblcat").html(response);
+            $("#newatncon").html("");
+            
+            window.location = "@Url.Action("Index", "Parent")";
+
+
+        }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+            alert("F");
+        });
+
+    });
+
+    $("#changeStatus").change(function () {
+
+        var v = $("#changeStatus").val();
+        $.ajax({
+            type:'GET',
+                 url: '@Url.Action("GetCity", "School")',
+            contentType:'html',
+                    data: {
+
+                        Id: v
+                    }
+
+
+             }).done(function (response) {
+
+                     $("#CityCombo").empty();
+                     $("#CityCombo").append(response)
+
+
+                }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                    swal({
+                        title: "Failed",
+                        text: "Some Error Occured! We will Fix Them Soon ",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                    });
+                });
+    });
+</script>

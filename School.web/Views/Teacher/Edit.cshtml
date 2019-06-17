@@ -1,0 +1,214 @@
+﻿@model School.web.ViewModel.EditTeacher
+    @{ 
+        ViewBag.Title = "Edit Teacher";
+    }
+
+<form method="post" id="frmcedit" class="form-control">
+    <div class="row">
+
+        <div class="col-md-8">
+            <input type="hidden" name="Id" value="@Model.Id" id="itemId" />
+            <div class="form-group">
+                <label>Country</label>
+                <select name="CountryId" class="form-control" id="changeStatus">
+
+                    @foreach (var item in Model.AvailableCountry)
+                    {
+                        <option value="@item.Id">@item.Name</option>
+                    }
+                </select>
+
+
+            </div>
+            <div class="form-group">
+                <label>City</label>
+                <select name="CityId" class="form-control" id="CityCombo">
+
+                    <option value="@Model.CityId">@Model.CityName</option>
+
+                </select>
+
+
+            </div>
+
+            <div class="form-group">
+                <label>School</label>
+
+                <select name="SchoolId" class="form-control" id="SchoolCombo">
+                    <option value="@Model.SchoolId">@Model.SchoolName</option>
+                </select>
+
+
+            </div>
+            <div class="form-group">
+                <label>Name</label>
+                <input name="Name" value="@Model.Name" class="form-control" id="NameId" />
+            </div>
+            <div class="form-group">
+                <label>Gender <span class="text-danger">*</span></label>
+                <input name="Gender" id="GenderId" class="form-control" value="@Model.Gender" />
+            </div>
+            <div class="form-group">
+                <label>Contact <span class="text-danger">*</span></label>
+                <input name="Subject" class="form-control" value="@Model.ContactNo" id="SubjectId" />
+            </div>
+            <div class="form-group">
+                <label>Subject</label>
+
+                <select name="SubId" class="form-control" id="SchoolCombo">
+                    <option value="@Model.SubjectName.Id">@Model.SubjectName.Name</option>
+                    @foreach (var item in Model.subjects)
+                    {
+                        <option value="@item.Id">@item.Name</option>
+                    }
+                </select>
+
+
+            </div>
+            <div class="form-group">
+                <label>Address <span class="text-danger">*</span></label>
+                <textarea name="Address" class="form-control" value="@Model.Address" id="Addressess">@Model.Address</textarea>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="form-group">
+                <label>Parent-Image <span class="text-danger">*</span></label>
+                <input type="hidden" name="ImageUrl" id="ImageUrls" />
+                <input type="file" id="imageupload" class="form-control" />
+                <img id="showImage" class="form-control" style="width:300px;height:250px" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <button type="button" id="btnupto" class="btn btn-default"> <i class="fa fa-wrench" aria-hidden="true"></i>Save</button>
+        </div>
+    </div>
+</form>
+
+<script>
+     $("#imageupload").change(function () {
+        var element = this;
+        var formData = new FormData();
+        var totalFiles = element.files.length;
+        for (var i = 0; i < totalFiles; i++) {
+            var file = element.files[i];
+            formData.append("Photo", file);
+        }
+
+         $.ajax({
+            type: 'POST',
+             url: '@Url.Action("uploadImage", "Shared")',
+             data: formData,
+             dataType: 'json',
+             contentType: false,
+             processData: false
+
+         }).done(function (response) {
+             debugger;
+             if (response.Success) {
+                 $("#showImage").attr("src", response.Imageurl);
+                 $("#ImageUrls").val(response.Imageurl);
+             }
+
+
+        }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+            alert("F");
+        });
+    });
+
+
+     $("#btnupto").click(function () {
+         var v = $("#CityCombo").val();
+         var x = $("#SchoolCombo").val();
+         debugger;
+         $.ajax({
+             type: 'POST',
+             url: '@Url.Action("Edit","Teacher")',
+             data: {
+                 Id: $("#itemId").val(),
+                 CityId: v,
+                 Subject: $("#SubjectId").val(),
+                 Name: $("#NameId").val(),
+                 Addresse: $("#Addressess").val(),
+                 gender: $("#GenderId").val(),
+                 SchoolId: x,
+                 ImageUrl: $("#ImageUrls").val()
+
+             }
+
+        }).done(function (response) {
+            $("#tblcat").html(response);
+            window.location = "@Url.Action("Index","Teacher")";
+            
+
+
+        }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+            alert("Fut");
+        });
+
+    });
+
+     $("#changeStatus").change(function () {
+
+        var v = $("#changeStatus").val();
+        $.ajax({
+            type:'GET',
+                 url: '@Url.Action("GetCity", "School")',
+            contentType:'html',
+                    data: {
+
+                        Id: v
+                    }
+
+
+             }).done(function (response) {
+
+                     $("#CityCombo").empty();
+                     $("#CityCombo").append(response)
+
+
+                }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                    swal({
+                        title: "Failed",
+                        text: "Some Error Occured! We will Fix Them Soon ",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                    });
+                });
+    });
+
+     $("#CityCombo").change(function () {
+
+        var v = $("#CityCombo").val();
+        $.ajax({
+            type:'GET',
+                 url: '@Url.Action("GetSchool", "Teacher")',
+            contentType:'html',
+                    data: {
+
+                        Id: v
+                    }
+
+
+             }).done(function (response) {
+
+                 $("#SchoolCombo").empty();
+                 $("#SchoolCombo").append(response)
+
+
+                }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                    swal({
+                        title: "Failed",
+                        text: "Some Error Occured! We will Fix Them Soon ",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                    });
+                });
+    });
+
+</script>
+

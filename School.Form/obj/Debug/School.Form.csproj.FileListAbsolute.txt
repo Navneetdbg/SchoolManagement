@@ -1,0 +1,4 @@
+C:\Users\navne\source\repos\SchoolManagementSystem\School.Form\obj\Debug\School.Form.csprojResolveAssemblyReference.cache
+C:\Users\navne\source\repos\SchoolManagementSystem\School.Form\obj\Debug\School.Form.Properties.Resources.resources
+C:\Users\navne\source\repos\SchoolManagementSystem\School.Form\obj\Debug\School.Form.csproj.GenerateResource.Cache
+C:\Users\navne\source\repos\SchoolManagementSystem\School.Form\obj\Debug\School.Form.csproj.CoreCompileInputs.cache

@@ -1,0 +1,9 @@
+﻿<option value="">-----Select Class----</option>
+@if (ViewBag.ClassOption != null)
+{
+    foreach (var item in ViewBag.ClassOption)
+    {
+        <option value="@item.Value">@item.Text</option>
+    }
+
+}

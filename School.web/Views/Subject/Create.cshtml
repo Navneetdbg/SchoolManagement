@@ -1,0 +1,38 @@
+﻿
+<h3>Add New Subject</h3>
+<form method="post" class="form-control" id="frmcat">
+    <div class="row">
+        <div class="col-md-10">
+            <div class="form-group">
+                <label>Name</label>
+                <input name="Name" class="form-control" />
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-2">
+            <button type="button" id="btnnewsave" class="btn btn-success"><i class="fas fa-save" aria-hidden="true"></i>&nbsp;Save</button>
+        </div>
+    </div>
+</form>
+<script>
+    $("#btnnewsave").click(function () {
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Create","Subject")',
+            data: $("#frmcat").serialize()
+
+        }).done(function (response) {
+            $("#tblcat").html(response);
+            $("#newatncon").html("");
+            window.location = "@Url.Action("Index", "Subject")";
+
+        }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+            alert("F");
+        });
+
+    });
+</script>

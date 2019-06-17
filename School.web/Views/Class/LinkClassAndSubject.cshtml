@@ -1,0 +1,71 @@
+﻿@model School.web.ViewModel.Linking
+@{
+    ViewBag.Title = "LinkClassAndSubject";
+}
+
+<h2>Link Class And Subject</h2>
+
+<div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+    <div class="white-box">
+        <div class="row">
+            <div id="tblcat" class="container contact_container">
+                <form method="post" class="form-control" id="frmcat">
+                    
+                        <div class="col-md-10">
+                            <div class="form-group">
+                                <label>Class</label>
+                                <select name="CountryId" class="form-control" id="changeStatus">
+                                    <option value="">---Select Class---</option>
+                                    @foreach (var item in Model.classes)
+                                    {
+                                        <option value="@item.Id">@item.Name</option>
+                                    }
+                                </select>
+
+                            </div>
+
+                            <div class="form-group">
+                                <label>Subject</label>
+                                <select name="SubId" class="form-control" id="SubId">
+                                    <option value="">---Select Subject---</option>
+                                    @foreach (var item in Model.Subjects)
+                                    {
+                                        <option value="@item.Id">@item.Name</option>
+                                    }
+                                </select>
+
+                            </div>
+                        </div>
+
+                    
+                        <div class="col-md-2">
+                            <button type="button" id="btnnewsave" class="btn btn-success"><i class="fas fa-save" aria-hidden="true"></i>&nbsp;Save</button>
+                        </div>
+                    
+                
+                        
+                </form>
+
+            </div>
+        </div>
+        <br />
+        <br />
+       
+    </div>
+</div>
+<script>
+    $("#btnnewsave").click(function () {
+        $.ajax({
+            url: '@Url.Action("Link","Shared")',
+            method: 'POST',
+            data: {
+                SubId: $("#SubId").val(),
+                ClassId: $("#changeStatus").val()
+            }
+        }).done(function (response) {
+            swal("Linking", "Subject Is linked with class", "success");
+            }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                swal("Fail", "Subject Is already linked with class", "error");
+            });
+    });
+</script>

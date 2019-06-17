@@ -1,0 +1,245 @@
+﻿@model School.web.ViewModel.StudentDetail
+@{
+    ViewBag.Title = "Student-Detail";
+}
+<link href="~/Content/DetailsCss.css" type="text/css" rel="stylesheet">
+<div class="container emp-profile">
+    <form method="post">
+        <div class="row">
+            <div class="col-md-5">
+                <div class="profile-img">
+                    <img src="@Model.ImageUrl" alt="" />
+                    <div class="file btn btn-lg btn-primary">
+                        Change Photo
+                        <input type="file" name="file" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="profile-head">
+                    <h5>
+                        @Model.Name
+                    </h5>
+
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">About</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="profile-edit-btn" id="btnAddMore">Export PDF</button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-5">
+                <div class="profile-work">
+                    <p>
+                        <div class="form-group">
+                            <label>Add-Parent<span class="text-danger">*</span></label>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <input id="txtSearch" class="form-control" placeholder="Search Student" value="@Model.search" />
+                                </div>
+                                <div class="col-md-4">
+                                    <button id="btnSearch" type="button" class="btn btn-success">Search</button>
+                                </div>
+                            </div>
+                        </div>
+                    </p>
+
+                    <p>
+                        <div id="studata">
+                            @{ Html.RenderAction("GetParent", "Student", new { Id = Model.Id });}
+                        </div>
+                    </p>
+
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div class="tab-content profile-tab" id="myTabContent">
+                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Id</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>@Model.Id</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Name</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>@Model.Name</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Gender</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>@Model.Gender</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Email</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>@Model.Email</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Date of Birth</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>@Model.date.ToShortDateString()</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Class Name</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>@Model.ClassName</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>School Name</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>@Model.SchoolName</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Parents</label>
+                            </div>
+                            <div class="col-md-6">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Parent-Id</th>
+                                            <th>Parent Name</th>
+                                            <th>Delete</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.parents)
+                                        {
+                                            <tr>
+                                                <td>@item.Id</td>
+                                                <td>@item.Name</td>
+                                                <td><button type="button" class="bt btn btn-danger" data-id="@item.Id">X</button></td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Address</label>
+                            </div>
+                            <div class="col-md-6">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Addresses</th>
+                                            <th>City</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.Address)
+                                        {
+                                            <tr>
+                                                <td>@item.Details</td>
+
+                                                <td>@item.City.Name</td>
+
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    $("#btnAddMore").click(function () {
+
+        window.open('@Url.Action("ExportToPdf", "Student",new { Id= Model.Id})', "_blank");
+    });
+
+    $(".bt").click(function () {
+        var v = @Model.Id;
+                swal({
+                    title: "Confirm",
+                    text: "Are you Sure! that you want to delete this Country",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                    .then((willDelete) => {
+                        if (willDelete) {
+                            debugger;
+                            $.ajax({
+                                type: 'POST',
+                                url: '@Url.Action("Delink", "Student")',
+                                data: {
+                                    ParentId: $(this).attr('data-id'),
+                                    StudentId : v
+
+                                }
+
+
+                            }).done(function (response) {
+                                $("#tblcat").html(response);
+                                swal("Poof! Your Category has been deleted!", {
+                                    icon: "success",
+                                });
+
+                            }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                                alert("You Can't Delete This Category");
+                            });
+
+                        }
+                    });
+
+            });
+     $("#btnSearch").click(function () {
+        var searchValue = $("#txtSearch").val();
+                $.ajax({
+                    type: 'GET',
+                    url: '@Url.Action("GetParent", "Student")',
+                    contentType: 'html',
+                    data: {
+                        Search: searchValue,
+                        Id:'@Model.Id'
+                    }
+
+                }).done(function (response) {
+
+                    $("#studata").html(response);
+
+                }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("Fail");
+                });
+
+    });
+
+   
+</script>

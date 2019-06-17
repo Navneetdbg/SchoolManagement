@@ -1,0 +1,110 @@
+﻿@model School.web.ViewModel.createSchool
+
+    <form id="frmcat" class="form-control">
+        <div class="row">
+            <div class="col-md-10">
+
+                <div class="form-group">
+                    <label>Country</label>
+                    <select name="CountryId" class="form-control" id="changeStatus">
+                        <option value="">---Select Country---</option>
+                        @foreach (var item in Model.countries)
+                        {
+                            <option value="@item.Id">@item.Name</option>
+                        }
+                    </select>
+
+
+                </div>
+                <div class="form-group">
+                    <label>City</label>
+
+                    <select name="CityId" class="form-control" id="CityCombo"></select>
+
+
+                </div>
+
+                <div class="form-group">
+                    <label>Name <span class="text-danger">*</span></label>
+                    <input name="Name" class="form-control" placeholder="Name" id="NameId"/>
+                </div>
+
+                <div class="form-group">
+                    <label>Principal <span class="text-danger">*</span></label>
+                    <input name="Principal" id="PrincipalId" class="form-control" placeholder="Principal Name" />
+                </div>
+                <div class="form-group">
+                    <label>Address <span class="text-danger">*</span></label>
+                    <textarea name="Address" class="form-control" placeholder="Address" id="Addressess"/>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <button type="button" id="btnsave" class="btn btn-primary">
+                    <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                    Save
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <script>
+
+
+        $("#btnsave").click(function () {
+            var v = $("#CityCombo").val();
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Create","School")',
+            data: {
+                CityId : v,
+                Name: $("#NameId").val(),
+                Principal: $("#PrincipalId").val(),
+                Address: $("#Addressess").val()
+            }
+
+        }).done(function (response) {
+            $("#tblcat").html(response);
+            $("#newatncon").html("");
+            window.location = "@Url.Action("Index", "School")";
+
+
+        }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+            alert("F");
+        });
+
+    });
+
+    $("#changeStatus").change(function () {
+
+        var v = $("#changeStatus").val();
+        $.ajax({
+            type:'GET',
+                 url: '@Url.Action("GetCity", "School")',
+            contentType:'html',
+                    data: {
+
+                        Id: v
+                    }
+
+
+             }).done(function (response) {
+                 
+                     $("#CityCombo").empty();
+                     $("#CityCombo").append(response)
+                 
+                 
+                }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                    swal({
+                        title: "Failed",
+                        text: "Some Error Occured! We will Fix Them Soon ",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                    });
+                });
+    });
+    </script>

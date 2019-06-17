@@ -1,0 +1,31 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="row">
+    <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+        <div class="white-box">
+
+            <div id="tblcat" class="container contact_container">
+                @{
+                    Html.RenderAction("CityList");
+
+                }
+            </div>
+            <br />
+            <br />
+            <div id="newatncon" class="container contact_container">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+        function focusAction(controlToFocus) {
+            $('html, body').animate({
+                scrollTop: $("#" + controlToFocus).offset().top - 100
+            }, 1100);
+        }
+</script>

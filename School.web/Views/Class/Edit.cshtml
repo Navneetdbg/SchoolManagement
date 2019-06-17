@@ -1,0 +1,203 @@
+﻿@model School.web.ViewModel.EditClass
+
+<form id="frmcat" class="form-control">
+    <div class="row">
+        <div class="col-md-10">
+            <input type="hidden" value="@Model.Id" id="itemId"/>
+            <div class="form-group">
+                <label>Country</label>
+                <select name="CountryId" class="form-control" id="changeStatus">
+                    
+                    @foreach (var item in Model.Availablecountries)
+                    {
+                        <option value="@item.Id">@item.Name</option>
+                    }
+                </select>
+
+
+            </div>
+            <div class="form-group">
+                <label>City</label>
+
+                <select name="CityId" class="form-control" id="CityCombo">
+                    <option value="@Model.CityId">@Model.CityName</option>
+                </select>
+
+
+            </div>
+           <div class="form-group">
+                    <label>School</label>
+
+                    <select name="SchoolId" class="form-control" id="SchoolCombo">
+                        <option value="@Model.SchoolId">@Model.SchoolName</option>
+                    </select>
+
+
+                </div>
+            
+             <div class="form-group">
+                    <label>Teacher</label>
+
+                    <select name="TeacherId" class="form-control" id="TeacherCombo">
+                        <option value="@Model.TeacherId">@Model.TeacherName</option>
+                    </select>
+
+
+                </div>
+            
+        
+            <div class="form-group">
+                <label>Name <span class="text-danger">*</span></label>
+                <input name="Name" class="form-control" value="@Model.Name" id="NameId" />
+            </div>
+
+            <div class="form-group">
+                <label>Grade <span class="text-danger">*</span></label>
+                <input name="Grade" class="form-control" value="@Model.Grade" id="GradeId" />
+            </div>
+
+            <div class="form-group">
+                <label>Section <span class="text-danger">*</span></label>
+                <input name="Section" class="form-control" value="@Model.Section" id="SectionId" />
+            </div>
+           
+        </div>
+
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-2">
+            <button type="button" id="btnsave" class="btn btn-primary">
+                <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                Save
+            </button>
+        </div>
+    </div>
+</form>
+
+<script>
+
+
+        $("#btnsave").click(function () {
+            var v = $("#TeacherCombo").val();
+            var x = $("#SchoolCombo").val();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Edit","Class")',
+            data: {
+                Id: $("#itemId").val(),
+                TeacherId: v,
+                Name: $("#NameId").val(),
+                SchoolId:x,
+                Section: $("#SectionId").val(),
+                
+                Grade: $("#GradeId").val()
+
+            }
+
+        }).done(function (response) {
+            $("#tblcat").html(response);
+           window.location = "@Url.Action("Index","Class")";
+
+
+        }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+            alert("F");
+        });
+
+    });
+
+    $("#changeStatus").change(function () {
+
+        var v = $("#changeStatus").val();
+        $.ajax({
+            type:'GET',
+                 url: '@Url.Action("GetCity", "School")',
+            contentType:'html',
+                    data: {
+
+                        Id: v
+                    }
+
+
+             }).done(function (response) {
+
+                     $("#CityCombo").empty();
+                     $("#CityCombo").append(response)
+
+
+                }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                    swal({
+                        title: "Failed",
+                        text: "Some Error Occured! We will Fix Them Soon ",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                    });
+                });
+    });
+
+
+    $("#CityCombo").change(function () {
+
+        var v = $("#CityCombo").val();
+        $.ajax({
+            type:'GET',
+                 url: '@Url.Action("GetSchool", "Teacher")',
+            contentType:'html',
+                    data: {
+
+                        Id: v
+                    }
+
+
+             }).done(function (response) {
+
+                 $("#SchoolCombo").empty();
+                 $("#SchoolCombo").append(response)
+
+
+                }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                    swal({
+                        title: "Failed",
+                        text: "Some Error Occured! We will Fix Them Soon ",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                    });
+                });
+    });
+
+    $("#SchoolCombo").change(function () {
+        debugger;
+
+        var v = $("#SchoolCombo").val();
+
+        $.ajax({
+            type:'GET',
+                 url: '@Url.Action("GetTeacher", "Class")',
+            contentType:'html',
+                    data: {
+
+                        Id: v
+                    }
+
+
+             }).done(function (response) {
+
+                 $("#TeacherCombo").empty();
+                 $("#TeacherCombo").append(response)
+
+
+                }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                    swal({
+                        title: "Failed",
+                        text: "Some Error Occured! We will Fix Them Soon ",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                    });
+                });
+    });
+
+</script>

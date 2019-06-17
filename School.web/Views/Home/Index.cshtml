@@ -1,0 +1,184 @@
+﻿@model School.web.ViewModel.EventsList
+
+@{ ViewBag.Title = "Index";}
+<h2>Index</h2>
+<button type="button" class="btn btn-success" id="btnAdd" data-toggle="modal" data-target="#myModals">Add new Event</button>
+<br/><br /><br />
+<div id="calender"></div>
+
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"><span id="eventTitle"></span></h4>
+            </div>
+            <div class="modal-body">
+                <p id="pDetails"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" id="myModals">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Add or Update Event</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <form id="frmcat" class="form-control">
+                    
+                    <div class="form-group">
+                        <label>Subject <span class="text-danger">*</span></label>
+                        <input name="Subject" class="form-control" placeholder="Subject" id="Subject" />
+                    </div>
+                    <div class="form-group">
+                        <label>Description <span class="text-danger">*</span></label>
+                        <textarea name="Description" class="form-control" placeholder="Description" id="Description"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Start Date <span class="text-danger">*</span></label>
+                        <input name="startDate" class="form-control" type="datetime-local" id="startDate" />
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            IsFullDay <span class="text-danger"></span>
+                            <input name="IsFullDay" type="checkbox" id="IsFullDay" value="1" onchange="valueChanged()" />
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>End Date <span class="text-danger">*</span></label>
+                        <input name="EndDate" class="form-control" type="datetime-local" id="EndDate" />
+                    </div>
+                    <div class="form-group">
+                        <label>Color</label>
+
+                        <select name="Color" class="form-control" id="Color">
+                            <option value="">Choose Color</option>
+                            <option value="Green">Green</option>
+                            <option value="Blue">Blue</option>
+                            <option value="Red">Red</option>
+                            <option value="Black">Black</option>
+                        </select>
+
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <button type="button" id="btnsave" class="btn btn-primary">
+                                <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                Save
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+<link href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.css" rel="stylesheet" />
+<link href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.print.css" rel="stylesheet" media="print" />
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            var events = [];
+            debugger;
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("GetEvents", "Home")",
+                success: function (data) {
+                    $.each(data, function (i, v) {
+                        events.push({
+                            title: v.Subject,
+                            description: v.Description,
+                            start: moment(v.startDate),
+                            end: v.End != null ? moment(v.EndDate) : null,
+                            color: v.Color,
+                            allDay: v.IsFullDay
+                        });
+                    })
+
+                    GenerateCalender(events);
+                },
+                error: function (error) {
+                    alert('failed');
+                }
+            })
+
+            function GenerateCalender(events) {
+                $('#calender').fullCalendar('destroy');
+                $('#calender').fullCalendar({
+                    contentHeight: 400,
+                    defaultDate: new Date(),
+                    timeFormat: 'h(:mm)a',
+                    header: {
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: 'month,basicWeek,basicDay,agenda'
+                    },
+                    eventLimit: true,
+                    eventColor: '#378006',
+                    events: events,
+                    eventClick: function (calEvent, jsEvent, view) {
+                        $('#myModal #eventTitle').text(calEvent.title);
+                        var $description = $('<div/>');
+                        $description.append($('<p/>').html('<b>Start:</b>' + calEvent.start.format("DD-MMM-YYYY HH:mm a")));
+                        if (calEvent.end != null) {
+                            $description.append($('<p/>').html('<b>End:</b>' + calEvent.end.format("DD-MMM-YYYY HH:mm a")));
+                        }
+                        $description.append($('<p/>').html('<b>Description:</b>' + calEvent.description));
+                        $('#myModal #pDetails').empty().html($description);
+
+                        $('#myModal').modal();
+                    }
+                })
+            }
+        })
+        function valueChanged() {
+            if ($('#IsFullDay').is(":checked"))
+                $("#EndDate").hide();
+            else
+                $("#EndDate").show();
+        }
+
+        $("#btnsave").click(function () {
+            debugger;
+            
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SaveEvent","Home")',
+                data: {
+                    subject: $("#Subject").val(),
+                    description: $("#Description").val(),
+                    startDate: $("#startDate").val(),
+                    EndDate: $("#EndDate").val(),
+                    IsFullDay: $("#IsFullDay").val(),
+                    Color: $("#Color").val(),
+                }
+
+            }).done(function () {
+                window.location = "@Url.Action("Index","Home")";
+                }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("Fail");
+            });
+        });
+    </script>

@@ -1,0 +1,11 @@
+﻿
+<option value="">-----Select City----</option>
+@if (ViewBag.cityOption != null)
+{
+    foreach (var item in ViewBag.cityOption)
+    {
+        <option value="@item.Value">@item.Text</option>
+    }
+
+}
+
